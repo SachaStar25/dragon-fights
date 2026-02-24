@@ -9,7 +9,7 @@ gdjs.evtsExt__Clipboard__WriteText = {};
 gdjs.evtsExt__Clipboard__WriteText.idToCallbackMap = new Map();
 
 
-gdjs.evtsExt__Clipboard__WriteText.userFunc0x3888a40 = function GDJSInlineCode(runtimeScene, eventsFunctionContext) {
+gdjs.evtsExt__Clipboard__WriteText.userFunc0x1bb9820 = function GDJSInlineCode(runtimeScene, eventsFunctionContext) {
 "use strict";
 const electron = runtimeScene.getGame().getRenderer().getElectron();
 const text = eventsFunctionContext.getArgument("text");
@@ -36,7 +36,7 @@ gdjs.evtsExt__Clipboard__WriteText.eventsList0 = function(runtimeScene, eventsFu
 {
 
 
-gdjs.evtsExt__Clipboard__WriteText.userFunc0x3888a40(runtimeScene, eventsFunctionContext);
+gdjs.evtsExt__Clipboard__WriteText.userFunc0x1bb9820(runtimeScene, eventsFunctionContext);
 
 }
 

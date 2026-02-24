@@ -9,7 +9,7 @@ gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses = {};
 gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.idToCallbackMap = new Map();
 
 
-gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.userFunc0xa3fd70 = function GDJSInlineCode(runtimeScene, eventsFunctionContext) {
+gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.userFunc0xd1ab20 = function GDJSInlineCode(runtimeScene, eventsFunctionContext) {
 "use strict";
 if (gdjs.__particleEmmiter3DExtension) {
     return;
@@ -30,9 +30,7 @@ class ParticleEmitter3DRenderer extends gdjs.CustomRuntimeObject3DRenderer {
         const threeObject3D = this.get3DRendererObject();
 
         threeObject3D.rotation.set(
-            // TODO The rotation on X goes the wrong way.
-            // Increment the major and remove this sign.
-            - gdjs.toRad(this._object.getRotationX()),
+            gdjs.toRad(this._object.getRotationX()),
             gdjs.toRad(this._object.getRotationY()),
             gdjs.toRad(this._object.angle)
         );
@@ -164,13 +162,76 @@ class ParticleEmitterAdapter {
      * @param colorOverLife {ColorOverLife}
      * @param sizeOverLife {SizeOverLife}
      * @param applyForce {ApplyForce}
+     * @param applyForce {ApplyForce}
+     * @param widthOverLength {WidthOverLength}
      */
-    constructor(particleSystem, colorOverLife, sizeOverLife, applyForce) {
+    constructor(particleSystem, colorOverLife, sizeOverLife, applyForce, widthOverLength) {
         this.particleSystem = particleSystem;
         this.colorOverLife = colorOverLife;
         this.sizeOverLife = sizeOverLife;
         this.applyForce = applyForce;
+        this.widthOverLength = widthOverLength;
     }
+
+    /**
+     * @param renderMode {'Billboard' | 'Trail'}
+     */
+    setRenderMode(renderMode) {
+        switch (renderMode) {
+            case "BillBoard":
+                this.particleSystem.renderMode = RenderMode.BillBoard;
+                break;
+            case "Trail":
+                this.particleSystem.renderMode = RenderMode.Trail;
+                this.particleSystem.rendererEmitterSettings.startLength = new IntervalValue(30, 30);
+                break;
+        }
+    }
+
+    /**
+     * @param startLengthMin {number}
+     */
+    setTrailStartLengthMin(startLengthMin) {
+        const startLength = this.particleSystem.rendererEmitterSettings.startLength;
+        if (!startLength) {
+            return;
+        }
+        startLength.a = startLengthMin;
+    }
+
+    /**
+     * @param startLengthMax {number}
+     */
+    setTrailStartLengthMax(startLengthMax) {
+        const startLength = this.particleSystem.rendererEmitterSettings.startLength;
+        if (!startLength) {
+            return;
+        }
+        startLength.b = startLengthMax;
+    }
+
+    /**
+     * @param followLocalOrigin {boolean}
+     */
+    setTrailFollowingLocalOrigin(followLocalOrigin) {
+        this.particleSystem.rendererEmitterSettings.followLocalOrigin = followLocalOrigin;
+    }
+
+    /**
+     * @param trailEndWidthRatio {number}
+     */
+    setTrailEndWidthRatio(trailEndWidthRatio) {
+        // Check this comment in the lib code:
+        // We added a multiplication with size because it's more convenient for the extension.
+
+        /** @type Bezier */
+        const bezier = this.widthOverLength.width.functions[0][0];
+        bezier.p[0] = 1;
+        bezier.p[1] = gdjs.evtTools.common.lerp(1, trailEndWidthRatio, 1 / 3);
+        bezier.p[2] = gdjs.evtTools.common.lerp(1, trailEndWidthRatio, 2 / 3);
+        bezier.p[3] = trailEndWidthRatio;
+    }
+
 
     /**
      * @param startColor {string}
@@ -1581,7 +1642,8 @@ class WidthOverLength {
             const iter = particle.previous.values();
             for (let i = 0; i < particle.previous.length; i++) {
                 const cur = iter.next();
-                cur.value.size = this.width.genValue((particle.previous.length - i) / particle.length);
+                // We added a multiplication with size because it's more convenient for the extension.
+                cur.value.size = this.width.genValue((particle.previous.length - i) / particle.length) * particle.size;
             }
         }
     }
@@ -6793,7 +6855,7 @@ gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.eventsList0 = function(runt
 {
 
 
-gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.userFunc0xa3fd70(runtimeScene, eventsFunctionContext);
+gdjs.evtsExt__ParticleEmitter3D__DefineHelperClasses.userFunc0xd1ab20(runtimeScene, eventsFunctionContext);
 
 }
 
