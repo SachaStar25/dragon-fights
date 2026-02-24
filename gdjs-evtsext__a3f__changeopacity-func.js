@@ -20,7 +20,7 @@ gdjs.evtsExt__A3F__ChangeOpacity.GDObjectObjects2= [];
 gdjs.evtsExt__A3F__ChangeOpacity.GDObjectObjects3= [];
 
 
-gdjs.evtsExt__A3F__ChangeOpacity.userFunc0x38ff960 = function GDJSInlineCode(runtimeScene, objects, eventsFunctionContext) {
+gdjs.evtsExt__A3F__ChangeOpacity.userFunc0xc14550 = function GDJSInlineCode(runtimeScene, objects, eventsFunctionContext) {
 "use strict";
 const Object2D = objects[0];
 const Object3D = Object2D.get3DRendererObject();
@@ -81,7 +81,7 @@ gdjs.copyArray(gdjs.evtsExt__A3F__ChangeOpacity.GDObjectObjects2, gdjs.evtsExt__
 
 
 const objects = gdjs.evtsExt__A3F__ChangeOpacity.GDObjectObjects3;
-gdjs.evtsExt__A3F__ChangeOpacity.userFunc0x38ff960(runtimeScene, objects, eventsFunctionContext);
+gdjs.evtsExt__A3F__ChangeOpacity.userFunc0xc14550(runtimeScene, objects, eventsFunctionContext);
 
 }
 
